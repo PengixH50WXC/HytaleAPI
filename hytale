@@ -5,6 +5,7 @@ result=$(curl --request GET --url https://hytale.com/api/blog/post/published -s)
 echo "Hytale blog posztok"
 echo "Készítette Boda Viktor (H50WXC)"
 echo "A hytale blog post címei:"
+echo
 I=0
 year=2020
 month=12
@@ -15,6 +16,8 @@ do
 done
 }
 datumpost(){
+echo "Cím és dátum:"
+echo
 year=$(echo $1 | cut -d . -f 1)
 month=$(echo $1 | cut -d . -f 2)
 result=$(curl --request GET --url https://hytale.com/api/blog/post/archive/$year/$month/ -s)
