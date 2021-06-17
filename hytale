@@ -37,7 +37,6 @@ do
       ;;
     d )
       target=$OPTARG
-      #ide monjuk úgy kell a dátumot beírni, hogy 2020.01
       datumpost $target
       ;;
     \? )
