@@ -1,0 +1,48 @@
+#!/bin/bash
+
+post(){
+result=$(curl --request GET --url https://hytale.com/api/blog/post/published -s)
+echo "Hytale blog posztok"
+echo "Készítette Boda Viktor (H50WXC)"
+echo "A hytale blog post címei:"
+I=0
+year=2020
+month=12
+while [ "$(echo $result | jq .[$I])" != null ]
+do
+	echo $result | jq .[$I].title | tr -d "\""
+	I=$(($I+1))
+done
+}
+datumpost(){
+year=$(echo $1 | cut -d . -f 1)
+month=$(echo $1 | cut -d . -f 2)
+result=$(curl --request GET --url https://hytale.com/api/blog/post/archive/$year/$month/ -s)
+I=0
+while [ "$(echo $result | jq .[$I])" != null ]
+do
+        echo $result | jq .[$I].title | tr -d "\""
+        echo $result | jq .[$I].createdAt | tr -d "\"Z" | tr "T" " "
+        I=$(($I+1))
+done
+}
+while getopts ":ad:" opt;
+do
+  case ${opt} in
+    a )
+      post
+      ;;
+    d )
+      target=$OPTARG
+      #ide monjuk úgy kell a dátumot beírni, hogy 2020.01
+      datumpost $target
+      ;;
+    \? )
+      echo "Helytelen opció: $OPTARG" 1>&2
+      ;;
+    : )
+      echo "Helytelen opció: $OPTARG kér egy argumentumot" 1>&2
+      ;;
+  esac
+done
+shift $((OPTIND -1))
